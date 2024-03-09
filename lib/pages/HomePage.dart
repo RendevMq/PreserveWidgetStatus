@@ -43,11 +43,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget _buildBody() {
-    return _PageItem(
-      index: _currentIndex,
-      key: Key(_currentIndex
-          .toString()), //A new key is set to assume it is a new widdget
+  Widget _buildBody( int index) {
+    return IgnorePointer(
+      ignoring: index != _currentIndex,
+      child: Opacity(
+        opacity: index == _currentIndex ? 1.0 : 0.0,
+        child: _PageItem(
+          index: index,
+          key: Key(index
+              .toString()), //A new key is set to assume it is a new widdget
+        ),
+      ),
     );
   }
 
@@ -71,7 +77,14 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Preserve widget status"),
         centerTitle: true,
       ),
-      body: _buildBody(),
+      // body: _buildBody(),
+      body:Stack(
+        children: [
+          _buildBody(0),
+          _buildBody(1),
+          _buildBody(2),
+        ],
+      ),
     );
   }
 }
