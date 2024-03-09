@@ -17,11 +17,7 @@ List<Person> people = [
           "https://images.pexels.com/photos/762080/pexels-photo-762080.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
 ];
 
-List<Color> colors = [
-  Colors.redAccent,
-  Colors.purpleAccent,
-  Colors.blueAccent
-];
+List<Color> colors = [Colors.redAccent, Colors.purpleAccent, Colors.blueAccent];
 
 //==========================================================//
 //:::::::::::::::::::::::HOME PAGE:::::::::::::::::::::::::://
@@ -36,11 +32,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  final PageController _controller = PageController();
 
   void _onChange(int index) {
     setState(() {
       _currentIndex = index;
     });
+    _controller.animateToPage( //If I don't want animation, it can be a jumptopage.
+      _currentIndex,
+      duration: Duration(milliseconds: 400),
+      curve: Curves.linear,
+    );
   }
 
   Widget _buildBody() {
@@ -71,7 +73,15 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Preserve widget status"),
         centerTitle: true,
       ),
-      body: _buildBody(),
+      body: PageView.builder(
+        itemCount: 3,
+        physics: const NeverScrollableScrollPhysics(), //For the user to be able to change only by means of taps 
+        controller: _controller,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return _PageItem(index: index);
+        },
+      ),
     );
   }
 }
@@ -92,7 +102,8 @@ class _PageItem extends StatefulWidget {
   State<_PageItem> createState() => _PageItemState();
 }
 
-class _PageItemState extends State<_PageItem> {
+class _PageItemState extends State<_PageItem>
+    with AutomaticKeepAliveClientMixin {
   List<Person> persons = [];
 
   void loadPeople() async {
@@ -144,4 +155,8 @@ class _PageItemState extends State<_PageItem> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

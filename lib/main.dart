@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Preservee widget status',
+      title: 'Preservee widget status - SOLUTION 1',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       home: HomePage(),
